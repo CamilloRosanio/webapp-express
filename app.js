@@ -25,6 +25,15 @@ const moviesRouter = require('./routers/moviesRouter');
 app.use('/movies', moviesRouter);
 
 
+// ERROR HANDLERS
+// NOTES_3.1.1
+const notFound = require('./middlewares/notFound');
+app.use(notFound);
+
+const errorsHandler = require('./middlewares/errorsHandler');
+app.use(errorsHandler);
+
+
 // SERVER LISTENING
 app.listen(config.APP_PORT, () => {
     console.log(`Server listening at: ${config.APP_HOST}:${config.APP_PORT}`)

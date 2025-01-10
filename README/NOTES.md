@@ -26,5 +26,9 @@ Buona pratica anche impostare la rotta con il nome della risorsa (Es. "/movies" 
 Tra i MIDDLEWARES fondamentali, troviamo la funzione di Express che traduce le risposte in JSON, senza cui nessuna CRUD può essere eseguita correttamente.
 A seguire la dichiarazione della cartella PUBLIC.
 
+## app.js_NOTES_3.1.1
+Gli ERROR HANDLERS (che sono MIDDLEWARE) sono fondamentali. Parliamo del "404 NOT FOUND" e di "NO RESULTS".
+Questi MIDDLEWARE vanno sempre registrati prima del LISTENING.
+
 ## moviesRouter_NOTES_1.1.1
 Si potrebbe anche importare l'inter Router, ma usando il DESTRUCTURING come in questo caso, può risultare più comodo perchè posso cambiare risorsa semplicemente cambiando il REQUIRE del CONTROLLER. In altri termini un "copia-incolla" più rapido e pulito senza cambiare a uno a uno as esempio "moviesController.index", etc.
