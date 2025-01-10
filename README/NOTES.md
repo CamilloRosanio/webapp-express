@@ -45,3 +45,7 @@ Avrei potuto dichiarare questa funzione anche DOPO le CRUD. Questo perchè al ca
 ## moviesController_NOTES_1.1.3
 Nella CRUD SHOW (per come è scritta ora), per ottenere le REVIEWS dei film bisogna creare una QUERy "nested" all'intero della QUERY per la SHOW.
 A sua volta, essendo le due funzioni asincrone, è necessario "nestare" anche la POSITIVE RESPONSE.
+
+## moviesController_NOTES_1.1.4
+L'error handler per Not Found (404) funziona basandosi sulla LENGHT dell'Array dei risultati. Se non ci sono risultati (Es. nessun elemento con un certo ID), la LENGHT è =0.
+L'IF in questa funzione controlla la LENGHT, e se è =0 conta come TRUE, quindi l'errore viene gestito.

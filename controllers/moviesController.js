@@ -33,7 +33,7 @@ function index(req, res) {
     // CALL INDEX QUERY
     connection.query(sqlIndex, (err, results) => {
 
-        // ERROR HANDLER
+        // ERROR HANDLER 500
         // NOTES_1.1.1
         errorHandler500(err);
 
@@ -71,10 +71,13 @@ function show(req, res) {
     // CALL SHOW QUERY
     connection.query(sqlShow, [id], (err, results) => {
 
-        // ERROR HANDLER
+        // ERROR HANDLER 500
         errorHandler500(err);
 
         const [movie] = results;
+
+        // ERROR HANDLER 404
+        errorHandler404(movie);
 
         // ITEM IMAGE PATH MAPPING
         movie.image = generateCompleteImagePath(movie.image);
@@ -90,9 +93,10 @@ function show(req, res) {
             WHERE movie_id = ?`;
 
         // CALL INDEX REVIEWS QUERY
+        // NOTES_1.1.3
         connection.query(sqlIndexReviews, [id], (err, results) => {
 
-            // ERROR HANDLER
+            // ERROR HANDLER 500
             errorHandler500(err);
 
             // PROPERTY ADDED TO THE ELEMENT
@@ -126,6 +130,17 @@ const errorHandler500 = (err) => {
         return res.status(500).json({
             status: 'KO',
             message: 'Database query failed'
+        })
+    };
+};
+
+// ERROR HANDLER (404)
+// NOTES_1.1.4
+const errorHandler404 = (item) => {
+    if (!item) {
+        return res.status(404).json({
+            status: 'KO',
+            message: 'Not found'
         })
     };
 };
