@@ -22,6 +22,10 @@ const config = {
 // INDEX
 function index(req, res) {
 
+    // URL QUERY (ARGUMENTS AS FILTERS)
+    const filterTitle = req.query.title;
+    const filterGenre = req.query.genre;
+
     // SQL QUERY
     let sqlIndex = `
     SELECT 
@@ -30,8 +34,24 @@ function index(req, res) {
         image
     FROM movies.movies`;
 
+    // FILTERS ARRAY
+    let filtersArray = [];
+    let firstFilter = true;
+
+    if (filterTitle) {
+        sqlIndex += ` ${firstFilter ? `WHERE` : `AND`} title LIKE ?`;
+        filtersArray.push(`%${filterTitle}%`);
+        firstFilter = false;
+    }
+
+    if (filterGenre) {
+        sqlIndex += ` ${firstFilter ? `WHERE` : `AND`} genre LIKE ?`;
+        filtersArray.push(`%${filterGenre}%`);
+        firstFilter = false;
+    }
+
     // CALL INDEX QUERY
-    connection.query(sqlIndex, (err, results) => {
+    connection.query(sqlIndex, filtersArray, (err, results) => {
 
         // ERROR HANDLER 500
         // NOTES_1.1.1
@@ -124,7 +144,7 @@ const generateCompleteImagePath = (imageName) => (
 );
 
 // ERROR HANDLER (500)
-const errorHandler500 = (err) => {
+const errorHandler500 = (err, res) => {
     if (err) {
         console.log(err);
         return res.status(500).json({

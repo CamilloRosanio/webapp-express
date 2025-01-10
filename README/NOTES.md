@@ -49,3 +49,4 @@ A sua volta, essendo le due funzioni asincrone, è necessario "nestare" anche la
 ## moviesController_NOTES_1.1.4
 L'error handler per Not Found (404) funziona basandosi sulla LENGHT dell'Array dei risultati. Se non ci sono risultati (Es. nessun elemento con un certo ID), la LENGHT è =0.
 L'IF in questa funzione controlla la LENGHT, e se è =0 conta come TRUE, quindi l'errore viene gestito.
+Al contempo, questo handler gestisce anche richieste con ID formattati male (Es. "abc"), e riporta semplicemente l'errore 404.
