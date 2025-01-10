@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 
-// IMPORT ENV
+// IMPORT ENV + DEFAULT
 // NOTES_1.1.1
 const { APP_HOST, APP_PORT } = process.env;
 
@@ -22,7 +22,8 @@ app.use(express.static('public'));
 // REGISTERING ROUTES
 // NOTES_1.1.2
 const moviesRouter = require('./routers/moviesRouter');
-app.use('/movies', moviesRouter);
+// NOTES_1.1.3
+app.use('/api/movies', moviesRouter);
 
 
 // ERROR HANDLERS

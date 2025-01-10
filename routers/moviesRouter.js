@@ -5,11 +5,12 @@ const router = express.Router();
 
 // IMPORT CONTROLLER
 // NOTES_1.1.1
-const { index } = require('../controllers/moviesController');
+const { index, show } = require('../controllers/moviesController');
 
 
 // DICHIARAZIONE ROUTES
 router.get('/', index);
+router.get('/:id', show);
 
 
 // EXPORT ROUTER
