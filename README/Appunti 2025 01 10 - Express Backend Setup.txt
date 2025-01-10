@@ -1,0 +1,31 @@
+****************************************************************************************
+INIT PROJECT EXPRESS (BACKEND + DB)
+****************************************************************************************
+
+*****INIT DEL PROGETTO
+
+npm init
+entry point: app.js
+npm i express
+creazione .env (port / host / DB port / DB credenziali / etc)
+dichiarazione di express sull'entry point (configurazione)
+configurazione STATIC (public)
+server listening (express in ascolto) + console.log di conferma
+aggiungere a "scripts" sul package json gli script "watch/dev" (node --watch app.js) e "start" (node app.js)
+per leggere gli .env aggiungere al "watch" questa stringa: "node --env-file=.env --watch app.js"
+npm run dev (/watch a seconda del nome del prompt)
+a questo punto se tutto è corretto in console leggerò il concole.log di conferma
+creare .gitignore (node_modules / .env)
+creare l'object "config" per dare con || la configurazione di default anche se non dovessi avere il .env
+Ora siamo pronti a eseguire il primo Commit
+
+NOTA: aprendo il browser ci dirà "cannot Get" perchè non abbiamo costruito nessuna rotta
+
+
+*****DB SETUP
+
+npm i mysql2
+DRAW.IO: creo il diagramma ER (Entity-Relationship) del nostro DB
+creo la cartella "db" nella repository e ci metto il diagramma ER
+MYSQL WORKBENCH: devo creare il DB nuovo
+creo "connection.js" (o "conn.js") nella cartella "db"
