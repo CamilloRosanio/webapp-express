@@ -17,7 +17,7 @@ const config = {
 // NOTES_4.1.1
 const cors = require('cors');
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5173',
     optionSuccessStatus: 200
 };
 
