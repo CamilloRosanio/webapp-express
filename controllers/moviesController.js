@@ -26,7 +26,7 @@ function index(req, res) {
     const filterTitle = req.query.title;
     const filterGenre = req.query.genre;
 
-    // SQL QUERY
+    // SQL INDEX QUERY
     let sqlIndex = `
     SELECT 
         id,
@@ -78,7 +78,7 @@ function show(req, res) {
     // URL PARAMETER
     const id = req.params.id;
 
-    // SQL QUERY
+    // SQL SHOW QUERY
     const sqlShow = `
     SELECT 
         id,
@@ -128,9 +128,40 @@ function show(req, res) {
     });
 };
 
+// DESTROY
+function destroy(req, res) {
+
+    // // URL PARAMETER
+    // const id = req.params.id;
+
+    // // SQL DESTROY QUERY
+    // const sqlDestroy = `
+    // DELETE 
+    // FROM movies.movies
+    // WHERE id = ?`;
+
+    // // CALL DESTROY QUERY
+    // connection.query(sqlDestroy, [id], (err, results) => {
+
+    //     // ERROR HANDLER 500
+    //     errorHandler500(err);
+
+    //     // POSITIVE RESPOSE
+    //     res.json({
+    //         status: 'OK',
+    //         message: `Item with ID ${id} deleted`
+    //     });
+    // });
+
+    // CRUD disabled
+    res.json({
+        status: 'RESTRICTED',
+        message: `DESTROY CRUD disabled`
+    });
+};
 
 // EXPORT CRUD
-module.exports = { index, show };
+module.exports = { index, show, destroy };
 
 
 /******************************************************************************
@@ -140,7 +171,7 @@ module.exports = { index, show };
 // IMAGE PATH MAPPING
 // NOTES_1.1.2
 const generateCompleteImagePath = (imageName) => (
-    `${config.APP_HOST}:${config.APP_PORT}/img/movies_cover/${imageName}`
+    `${config.APP_HOST}: ${config.APP_PORT} / img / movies_cover / ${imageName}`
 );
 
 // ERROR HANDLER (500)

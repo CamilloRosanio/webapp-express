@@ -11,8 +11,7 @@ NOTA:
             num.num.num (ID univoco della nota in quel file)
 
 
-
-## package.json_NOTES_FIND ("scripts": / "watch")
+## package.json_NOTES_FIND ("scripts": / "watch" + ENV)
 Per leggere le variabili ambientali da ".env" senza installare il pacchetto ("npm i dotenv") aggiungere al "watch" questa stringa: "node --env-file=.env --watch app.js".
 
 ## app.js_NOTES_1.1.1
@@ -32,6 +31,10 @@ A seguire la dichiarazione della cartella PUBLIC.
 ## app.js_NOTES_3.1.1
 Gli ERROR HANDLERS (che sono MIDDLEWARE) sono fondamentali. Parliamo del "404 NOT FOUND" e di "NO RESULTS".
 Questi MIDDLEWARE vanno sempre registrati prima del LISTENING.
+
+## app.js_NOTES_4.1.1
+I CORS permettono di definire la WHITELIST dei DOMAIN a cui è permesso fare richieste al backend. Si pùò definire il dominio a cui è garantito l'accesso ai dati definendolo nelle "corsOptions" dichiarate su app.js. In questo caso viene garantito l'accesso a "http://localhost:3000". 
+E' FONDAMENTALE che nell'ORIGIN sia definito l'URL senza "/" finale. Aggiungerlo potrebbe dare un errore.
 
 ## moviesRouter_NOTES_1.1.1
 Si potrebbe anche importare l'inter Router, ma usando il DESTRUCTURING come in questo caso, può risultare più comodo perchè posso cambiare risorsa semplicemente cambiando il REQUIRE del CONTROLLER. In altri termini un "copia-incolla" più rapido e pulito senza cambiare a uno a uno as esempio "moviesController.index", etc.
