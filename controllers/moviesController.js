@@ -94,7 +94,7 @@ function show(req, res) {
     JOIN movies.reviews
     ON movies.id = reviews.movie_id
     GROUP BY movies.id
-    HAVING id = 5`;
+    HAVING id = ?`;
 
     // CALL SHOW QUERY
     connection.query(sqlShow, [id], (err, results) => {
