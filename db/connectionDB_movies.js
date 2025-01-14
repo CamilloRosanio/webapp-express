@@ -9,7 +9,7 @@ const configDB = {
     DB_HOST: DB_HOST || 'localhost',
     DB_NAME: DB_NAME || 'movies',
     DB_USER: DB_USER || 'root',
-    DB_PASSWORD: DB_PASSWORD || 'password',
+    DB_PASSWORD: DB_PASSWORD || 'movies',
 };
 
 

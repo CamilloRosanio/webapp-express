@@ -29,14 +29,10 @@ function index(req, res) {
     // SQL INDEX QUERY
     let sqlIndex = `
     SELECT 
-        movies.id,
-        movies.title,
-        movies.image,
-        AVG(reviews.vote) AS vote_avg
-    FROM movies.movies
-    JOIN movies.reviews
-    ON movies.id = reviews.movie_id
-    GROUP BY movies.id`;
+        id,
+        title,
+        image
+    FROM movies.movies`;
 
     // FILTERS ARRAY
     let filtersArray = [];
@@ -85,16 +81,12 @@ function show(req, res) {
     // SQL SHOW QUERY
     const sqlShow = `
     SELECT 
-        movies.id,
-        movies.title,
-        movies.image,
-        movies.abstract,
-        AVG(reviews.vote) AS vote_avg
+        id,
+        title,
+        image,
+        abstract
     FROM movies.movies
-    JOIN movies.reviews
-    ON movies.id = reviews.movie_id
-    GROUP BY movies.id
-    HAVING id = ?`;
+    WHERE id = ?`;
 
     // CALL SHOW QUERY
     connection.query(sqlShow, [id], (err, results) => {
