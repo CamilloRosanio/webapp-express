@@ -36,6 +36,9 @@ const moviesRouter = require('./routers/moviesRouter');
 // NOTES_1.1.3
 app.use('/api/movies', moviesRouter);
 
+const reviewsRouter = require('./routers/reviewsRouter');
+app.use('/api/reviews', reviewsRouter);
+
 
 // ERROR HANDLERS
 // NOTES_3.1.1

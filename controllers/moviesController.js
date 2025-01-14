@@ -96,6 +96,7 @@ function show(req, res) {
     SELECT 
         movies.id,
         movies.title,
+        movies.genre,
         movies.image,
         movies.abstract,
         AVG(reviews.vote) AS vote_avg 
