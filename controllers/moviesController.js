@@ -27,36 +27,40 @@ const config = {
 function index(req, res) {
 
     // URL QUERY (ARGUMENTS AS FILTERS)
-    const filterTitle = req.query.title;
-    const filterGenre = req.query.genre;
+    const filterTitle = req.query.title || '%';
+    const filterGenre = req.query.genre || '%';
 
     // SQL INDEX QUERY
     let sqlIndex = `
     SELECT 
         movies.id,
         movies.title,
+        movies.genre,
         movies.image,
         AVG(reviews.vote) AS vote_avg     
         FROM movies.movies
         JOIN movies.reviews
-        ON movies.id = reviews.movie_id
-    GROUP BY movies.id`;
+    ON movies.id = reviews.movie_id`;
 
-    // FILTERS ARRAY
+    // FILTERS
     let filtersArray = [];
     let firstFilter = true;
 
     if (filterTitle) {
-        sqlIndex += ` ${firstFilter ? `WHERE` : `AND`} title LIKE ?`;
+        sqlIndex += ` ${firstFilter ? `WHERE` : `AND`} movies.title LIKE ?`;
         filtersArray.push(`%${filterTitle}%`);
         firstFilter = false;
     }
 
     if (filterGenre) {
-        sqlIndex += ` ${firstFilter ? `WHERE` : `AND`} genre LIKE ?`;
+        sqlIndex += ` ${firstFilter ? `WHERE` : `AND`} movies.genre LIKE ?`;
         filtersArray.push(`%${filterGenre}%`);
         firstFilter = false;
     }
+
+    // SQL INDEX QUERY - GROUP BY
+    // Adds GROUP BY after checking of filter existence.
+    sqlIndex += `GROUP BY movies.id`
 
     // CALL INDEX QUERY
     connection.query(sqlIndex, filtersArray, (err, results) => {
