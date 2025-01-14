@@ -5,11 +5,12 @@ const app = express();
 
 // IMPORT ENV + DEFAULT
 // NOTES_1.1.1
-const { APP_HOST, APP_PORT } = process.env;
+const { APP_HOST, APP_PORT, CORS_PORT } = process.env;
 
 const config = {
     APP_HOST: APP_HOST || 'http://localhost',
     APP_PORT: APP_PORT || '3000'
+    CORS_PORT: CORS_PORT || '5713'
 };
 
 
@@ -17,7 +18,7 @@ const config = {
 // NOTES_4.1.1
 const cors = require('cors');
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: `${config.APP_HOST}:${config.CORS_PORT}`,
     optionSuccessStatus: 200
 };
 
