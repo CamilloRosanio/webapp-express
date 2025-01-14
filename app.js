@@ -27,7 +27,7 @@ const corsOptions = {
 // NOTES_2.1.1
 app.use(express.json());
 app.use(express.static('public'));
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 
 // REGISTERING ROUTES

@@ -58,9 +58,10 @@ function index(req, res) {
         firstFilter = false;
     }
 
-    // SQL INDEX QUERY - GROUP BY
-    // Adds GROUP BY after checking of filter existence.
-    sqlIndex += `GROUP BY movies.id`
+    // SQL INDEX QUERY - CLOSING LINES
+    sqlIndex += `
+    GROUP BY movies.id
+    ORDER BY movies.title`;
 
     // CALL INDEX QUERY
     connection.query(sqlIndex, filtersArray, (err, results) => {
