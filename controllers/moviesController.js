@@ -40,8 +40,7 @@ function index(req, res) {
         FROM movies.movies
         JOIN movies.reviews
         ON movies.id = reviews.movie_id
-        WHERE movies.id = 5
-        GROUP BY movies.id`;
+    GROUP BY movies.id`;
 
     // FILTERS ARRAY
     let filtersArray = [];
@@ -90,12 +89,16 @@ function show(req, res) {
     // SQL SHOW QUERY
     const sqlShow = `
     SELECT 
-        id,
-        title,
-        image,
-        abstract
-    FROM movies.movies
-    WHERE id = ?`;
+        movies.id,
+        movies.title,
+        movies.image,
+        movies.abstract,
+        AVG(reviews.vote) AS vote_avg 
+        FROM movies.movies
+        JOIN movies.reviews
+        ON movies.id = reviews.movie_id
+        WHERE movies.id = ?
+    GROUP BY movies.id`;
 
     // CALL SHOW QUERY
     connection.query(sqlShow, [id], (err, results) => {
