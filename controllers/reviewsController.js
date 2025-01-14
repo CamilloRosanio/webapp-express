@@ -32,6 +32,9 @@ function store(req, res) {
     // DATE AND TIME PARAMS
     const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+    // PARAMS VALIDATION
+    paramsValidation(movie_id, name, vote, text, created_at, updated_at);
+
     // QUERY PARAMS ARRAY
     const sqlParams = [movie_id, name, vote, text, currentDate, currentDate];
 
@@ -46,7 +49,7 @@ function store(req, res) {
         updated_at)
     VALUES (?, ?, ?, ?, ?, ?);`;
 
-    // CALL INDEX QUERY
+    // CALL STORE QUERY
     connection.query(sqlStore, sqlParams, (err, results) => {
 
         // ERROR HANDLER
@@ -81,3 +84,89 @@ const errorHandler500 = (err, res) => {
         });
     }
 };
+
+// PARAMS VALIDATION
+function paramsValidation({ movie_id, name, vote, text, created_at, updated_at }) {
+
+    // WORDS BLACKLIST
+    const forbiddenWords = ['parolaccia', 'insulto'];
+
+    // VALIDATION - MOVIE_ID
+    if (!movie_id) {
+        return {
+            status: 'KO',
+            message: 'Invalid field: movie_id',
+            validation_details: 'movie_id is required and must be of "int" type.'
+        };
+    }
+
+    // VALIDATION - NAME
+    if (!name || typeof name !== 'string' || name.length > 255) {
+        return {
+            status: 'KO',
+            message: 'Invalid field: name',
+            validation_details: 'name is required and must be a string of 255 characters max.'
+        };
+    }
+
+    for (let word of forbiddenWords) {
+        if (name.toLowerCase().includes(word)) {
+            return {
+                status: 'KO',
+                message: 'Invalid field: name',
+                validation_details: `name cannot contain blacklisted words like '${word}'.`
+            };
+        }
+    }
+
+    // VALIDATION - VOTE
+    if (!vote || typeof vote !== 'number' || vote < 1 || vote > 5) {
+        return {
+            status: 'KO',
+            message: 'Invalid field: vote',
+            validation_details: 'vote is required and must be a number between 1 and 5.'
+        };
+    }
+
+    // VALIDATION - TEXT
+    if (!text || typeof text !== 'string') {
+        return {
+            status: 'KO',
+            message: 'Invalid field: text',
+            validation_details: 'text is required and must be a string.'
+        };
+    }
+
+    for (let word of forbiddenWords) {
+        if (text.toLowerCase().includes(word)) {
+            return {
+                status: 'KO',
+                message: 'Invalid field: text',
+                validation_details: `text cannot contain blacklisted words like '${word}'.`
+            };
+        }
+    }
+
+    // VALIDATION - CREATED_AT
+    const timestampRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+    if (!created_at || !timestampRegex.test(created_at)) {
+        return {
+            status: 'KO',
+            message: 'Invalid field: created_at',
+            validation_details: 'created_at is required and must be in the format "YYYY-MM-DD HH:MM:SS".'
+        };
+    }
+
+    // VALIDATION - UPDATED_AT
+    if (!updated_at || !timestampRegex.test(updated_at)) {
+        return {
+            status: 'KO',
+            message: 'Invalid field: updated_at',
+            validation_details: 'updated_at is required and must be in the format "YYYY-MM-DD HH:MM:SS".'
+        };
+    }
+
+    // END OF VALIDATION
+    return null;
+}
+
