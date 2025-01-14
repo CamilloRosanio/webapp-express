@@ -9,6 +9,10 @@ const connection = require('../db/connectionDB_movies');
 // IMPORT ENV + DEFAULT
 const { APP_HOST, APP_PORT } = process.env;
 
+if (!APP_HOST || !APP_PORT) {
+    console.log('Missing ENV variables');
+}
+
 const config = {
     APP_HOST: APP_HOST || 'http://localhost',
     APP_PORT: APP_PORT || '3000'
@@ -53,11 +57,11 @@ function index(req, res) {
     // CALL INDEX QUERY
     connection.query(sqlIndex, filtersArray, (err, results) => {
 
-        // ERROR HANDLER 500
-        // NOTES_1.1.1
-        errorHandler500(err);
+        // ERROR HANDLER
+        if (err) {
+            return errorHandler500(err, res);
+        }
 
-        // ITEMS IMAGE PATH MAPPING
         const movies = results.map(movie => ({
             ...movie,
             image: generateCompleteImagePath(movie.image)
@@ -68,7 +72,7 @@ function index(req, res) {
             status: 'OK',
             movies: movies
         });
-    })
+    });
 };
 
 
@@ -91,13 +95,17 @@ function show(req, res) {
     // CALL SHOW QUERY
     connection.query(sqlShow, [id], (err, results) => {
 
-        // ERROR HANDLER 500
-        errorHandler500(err);
+        // ERROR HANDLER
+        if (err) {
+            return errorHandler500(err, res);
+        }
+
+        // ERROR HANDLER
+        if (results.length === 0) {
+            return errorHandler404(null, res);
+        }
 
         const [movie] = results;
-
-        // ERROR HANDLER 404
-        errorHandler404(movie);
 
         // ITEM IMAGE PATH MAPPING
         movie.image = generateCompleteImagePath(movie.image);
@@ -113,14 +121,15 @@ function show(req, res) {
             WHERE movie_id = ?`;
 
         // CALL INDEX REVIEWS QUERY
-        // NOTES_1.1.3
-        connection.query(sqlIndexReviews, [id], (err, results) => {
+        connection.query(sqlIndexReviews, [id], (err, reviewResults) => {
 
-            // ERROR HANDLER 500
-            errorHandler500(err);
+            // ERROR HANDLER
+            if (err) {
+                return errorHandler500(err, res);
+            }
 
             // PROPERTY ADDED TO THE ELEMENT
-            movie.reviews = results;
+            movie.reviews = reviewResults;
 
             // POSITIVE RESPONSE
             res.json(movie);
@@ -128,40 +137,8 @@ function show(req, res) {
     });
 };
 
-// DESTROY
-function destroy(req, res) {
-
-    // // URL PARAMETER
-    // const id = req.params.id;
-
-    // // SQL DESTROY QUERY
-    // const sqlDestroy = `
-    // DELETE 
-    // FROM movies.movies
-    // WHERE id = ?`;
-
-    // // CALL DESTROY QUERY
-    // connection.query(sqlDestroy, [id], (err, results) => {
-
-    //     // ERROR HANDLER 500
-    //     errorHandler500(err);
-
-    //     // POSITIVE RESPOSE
-    //     res.json({
-    //         status: 'OK',
-    //         message: `Item with ID ${id} deleted`
-    //     });
-    // });
-
-    // CRUD disabled
-    res.json({
-        status: 'RESTRICTED',
-        message: `DESTROY CRUD disabled`
-    });
-};
-
 // EXPORT CRUD
-module.exports = { index, show, destroy };
+module.exports = { index, show };
 
 
 /******************************************************************************
@@ -169,29 +146,30 @@ module.exports = { index, show, destroy };
 ******************************************************************************/
 
 // IMAGE PATH MAPPING
-// NOTES_1.1.2
-const generateCompleteImagePath = (imageName) => (
-    `${config.APP_HOST}: ${config.APP_PORT} / img / movies_cover / ${imageName}`
-);
+const generateCompleteImagePath = (imageName) => {
+    if (!imageName) {
+        return `${config.APP_HOST}:${config.APP_PORT}/img/movies_cover/default.jpg`;
+    }
+    return `${config.APP_HOST}:${config.APP_PORT}/img/movies_cover/${imageName}`;
+};
 
 // ERROR HANDLER (500)
 const errorHandler500 = (err, res) => {
     if (err) {
-        console.log(err);
+        console.error(err);
         return res.status(500).json({
             status: 'KO',
             message: 'Database query failed'
-        })
-    };
+        });
+    }
 };
 
 // ERROR HANDLER (404)
-// NOTES_1.1.4
-const errorHandler404 = (item) => {
+const errorHandler404 = (item, res) => {
     if (!item) {
         return res.status(404).json({
             status: 'KO',
             message: 'Not found'
-        })
-    };
+        });
+    }
 };

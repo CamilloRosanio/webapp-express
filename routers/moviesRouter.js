@@ -5,13 +5,13 @@ const router = express.Router();
 
 // IMPORT CONTROLLER
 // NOTES_1.1.1
-const { index, show, destroy } = require('../controllers/moviesController');
+const { index, show, /*destroy*/ } = require('../controllers/moviesController');
 
 
 // DICHIARAZIONE ROUTES
 router.get('/', index);
 router.get('/:id', show);
-router.delete('/:id', destroy);
+// router.delete('/:id', destroy);
 
 
 // EXPORT ROUTER
