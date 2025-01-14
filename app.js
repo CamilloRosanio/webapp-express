@@ -9,7 +9,7 @@ const { APP_HOST, APP_PORT, CORS_PORT } = process.env;
 
 const config = {
     APP_HOST: APP_HOST || 'http://localhost',
-    APP_PORT: APP_PORT || '3000'
+    APP_PORT: APP_PORT || '3000',
     CORS_PORT: CORS_PORT || '5713'
 };
 
