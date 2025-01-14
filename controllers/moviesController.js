@@ -33,10 +33,15 @@ function index(req, res) {
     // SQL INDEX QUERY
     let sqlIndex = `
     SELECT 
-        id,
-        title,
-        image
-    FROM movies.movies`;
+        movies.id,
+        movies.title,
+        movies.image,
+        AVG(reviews.vote) AS vote_avg     
+        FROM movies.movies
+        JOIN movies.reviews
+        ON movies.id = reviews.movie_id
+        WHERE movies.id = 5
+        GROUP BY movies.id`;
 
     // FILTERS ARRAY
     let filtersArray = [];
