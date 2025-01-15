@@ -27,16 +27,16 @@ const config = {
 function store(req, res) {
 
     // REQUEST BODY PARAMS
-    const { movie_id, name, vote, text } = req.body;
+    const { movie_id, name, vote, text, created_at, updated_at } = req.body;
 
-    // DATE AND TIME PARAMS
-    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-    // PARAMS VALIDATION
-    paramsValidation(movie_id, name, vote, text, created_at, updated_at);
+    // ERROR HANDLER
+    const validationError = paramsValidation({ movie_id, name, vote, text, created_at, updated_at });
+    if (validationError) {
+        return res.status(400).json(validationError);
+    };
 
     // QUERY PARAMS ARRAY
-    const sqlParams = [movie_id, name, vote, text, currentDate, currentDate];
+    const sqlParams = [movie_id, name, vote, text, created_at, updated_at];
 
     // SQL STORE QUERY
     let sqlStore = `
@@ -60,7 +60,7 @@ function store(req, res) {
         // POSITIVE RESPONSE
         res.status(201).json({
             message: 'Review successfully posted',
-            reviewId: result.insertId
+            reviewId: results.insertId
         });
     });
 };
@@ -110,7 +110,7 @@ function paramsValidation({ movie_id, name, vote, text, created_at, updated_at }
     }
 
     for (let word of forbiddenWords) {
-        if (name.toLowerCase().includes(word)) {
+        if (name.toLowerCase().includes(word.toLowerCase())) {
             return {
                 status: 'KO',
                 message: 'Invalid field: name',
@@ -138,7 +138,7 @@ function paramsValidation({ movie_id, name, vote, text, created_at, updated_at }
     }
 
     for (let word of forbiddenWords) {
-        if (text.toLowerCase().includes(word)) {
+        if (text.toLowerCase().includes(word.toLowerCase())) {
             return {
                 status: 'KO',
                 message: 'Invalid field: text',
@@ -168,5 +168,5 @@ function paramsValidation({ movie_id, name, vote, text, created_at, updated_at }
 
     // END OF VALIDATION
     return null;
-}
+};
 
