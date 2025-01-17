@@ -39,7 +39,7 @@ function index(req, res) {
         movies.image,
         AVG(reviews.vote) AS vote_avg     
         FROM movies.movies
-        JOIN movies.reviews
+        LEFT JOIN movies.reviews
     ON movies.id = reviews.movie_id`;
 
     // FILTERS
@@ -71,10 +71,15 @@ function index(req, res) {
             return errorHandler500(err, res);
         }
 
+        // MOVIE MAPPING
         const movies = results.map(movie => ({
             ...movie,
-            image: generateCompleteImagePath(movie.image)
+            image: generateCompleteImagePath(movie.image),
+            reviews: movie.reviews === null ? [] : movie.reviews || []
         }));
+
+        // MOVIE MAPPING
+
 
         // POSITIVE RESPONSE
         res.json({
@@ -101,7 +106,7 @@ function show(req, res) {
         movies.abstract,
         AVG(reviews.vote) AS vote_avg 
         FROM movies.movies
-        JOIN movies.reviews
+        LEFT JOIN movies.reviews
         ON movies.id = reviews.movie_id
         WHERE movies.id = ?
     GROUP BY movies.id`;
